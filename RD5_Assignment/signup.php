@@ -1,11 +1,12 @@
 <?php
 require_once("connDB.php");
 session_start();
-
+//如果按下回首頁按鈕，跳轉頁面到首頁
 if (isset($_POST["btnHome"])) {
     header("Location: index.php");
     exit();
   }
+  //如果按下註冊按鈕，把申請註冊的資料匯進資料庫，成功註冊後跳轉頁面到首頁
 if (isset($_POST["sibtn"])) {
     $maccount = $_POST["siUserName"];
     $mpassword = $_POST["siPassword"];
@@ -17,23 +18,20 @@ if (isset($_POST["sibtn"])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>會員註冊</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-
     <style>
         body {
             background-color: lightblue;
         }
     </style>
 </head>
-
 <body style="background:url('./img5/bank.jpg')round">
     <h1 align="center">線上網銀系統</h1>
     <form id="form1" name="form1" method="post" action="signup.php" border="0" align="center" cellpadding="5" cellspacing="0" bgcolor="#F2F2F2">
         <div align="center" bgcolor="#CCCCCC" style="background-color:SlateBlue;">
             <font color="#FFFFFF">會員系統 - 註冊</font>
-        </div>
-        
+        </div>       
         <div style="width:50%;height:624px;text-align:center;margin:0 auto;"><br><br><br><br>
             <div>
                 <label>

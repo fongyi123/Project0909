@@ -5,8 +5,6 @@ if (isset($_POST['btn'])) {
     $_SESSION["id3"] = $_POST['time'];
     
 }
-
-
 //累積雨量
 // $url ="https://opendata.cwb.gov.tw/api/v1/rest/datastore/O-A0002-001?Authorization=CWB-0EF10C78-E76B-49E3-BD74-05B21416C3F5&format=JSON&locationName=parameterValue&elementName=HOUR_24¶meterName=CITY";
 // $url = "https://opendata.cwb.gov.tw/api/v1/rest/datastore/O-A0002-001?Authorization=CWB-0EF10C78-E76B-49E3-BD74-05B21416C3F5&format=JSON&locationName=parameterValue&elementName=HOUR_24&parameterName=CITY";
@@ -24,7 +22,6 @@ $elementValue4 = $json4['records']['location'][0]['weatherElement'][0]['elementV
 $parameterName4 = $json4['records']['location'][0]['parameter'][0]['parameterName'];
 $parameterValue4 = $json4['records']['location'][0]['parameter'][0]['parameterValue'];
 
-
 // var_dump($json4);
 echo "<br>累積雨量<br>";
 echo "<br>".$locationName4 . "<br>";
@@ -37,13 +34,10 @@ foreach ($location4 as $two) {
     echo "<br>" . $two['weatherElement'][0]['elementValue'] . "<br>";
     }
     foreach ($location4[0]['parameter'] as $three) {
-
         echo "<br>" . $three['parameterName'] . "<br>";
     }
     foreach ($location4[0]['parameter'] as $three) {
-
         echo "<br>" . $three['parameterValue'] . "<br>";
-
         $obT = $two['time']['obsTime'];
         $eleN = $two['weatherElement'][0]['elementName'];
         $eleV = $two['weatherElement'][0]['elementValue'];
@@ -54,10 +48,6 @@ foreach ($location4 as $two) {
         mysqli_query($link, $sql);
     }
 }
-
     // $records = $json['records'];
-    
-      
-   /*insert in db but you will have big quantity of queryes*/
-                
+   /*insert in db but you will have big quantity of queryes*/       
     // $sql = "INSERT INTO weather (datasetDescription, locationName, elementName, description, startTime, endTime, value) values('$datasetDescription','$locationName','$elementName','$description','$startTime','$endTime','$value')";

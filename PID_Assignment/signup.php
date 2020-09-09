@@ -1,13 +1,12 @@
 <?php
 require_once("connDB.php");
 session_start();
-
+//如果按下回首頁按鈕，跳轉頁面到首頁
 if (isset($_POST["btnHomeme"])) {
     header("Location: index.php");
     exit();
 }
-
-
+//如果按下註冊按鈕，把申請註冊的資料匯進資料庫，成功註冊後跳轉頁面到首頁
 if (isset($_POST["sibtnme"])) {
     $meaccount = $_POST["meaccount"];
     $mepassword = $_POST["mepassword"];
@@ -19,6 +18,7 @@ if (isset($_POST["sibtnme"])) {
 
     $sqlme = "INSERT INTO member (meaccount, mepasswd,mename,mebirthday,memail,mephone,meaddress) values('$meaccount','$mepassword','$mename','$mebirthday','$memail','$mephone','$meaddress')";
     mysqli_query($link, $sqlme);
+    header("Location: index.php");
 }
 ?>
 
@@ -28,7 +28,7 @@ if (isset($_POST["sibtnme"])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>會員註冊</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 
     <style>
@@ -56,6 +56,7 @@ if (isset($_POST["sibtnme"])) {
                 <label>
                     <font color="#000000">申請帳號 :
                 </label>
+                <!-- 必須輸入１到１４個字的帳號 -->
                 <input type="text" name="meaccount" id="txtUserName" pattern="\w{1,14}" required />
             </div>
             <br>
@@ -63,6 +64,7 @@ if (isset($_POST["sibtnme"])) {
                 <label>
                     <font color="#000000">申請密碼 :
                 </label>
+                <!-- 必須輸入１到１４個字的密碼 -->
                 <input type="password" name="mepassword" id="txtPassword" pattern="\w{1,14}" required />
             </div>
             <br>
@@ -104,6 +106,7 @@ if (isset($_POST["sibtnme"])) {
             <div>
                 <input type="submit" name="sibtnme" id="sibtnme" value="註冊" />
                 <input type="reset" name="btnReset" id="btnReset" value="重設" />
+                <!-- 不必輸入帳號和密碼就可以直接回到首頁 -->
                 <button type="button" name="btnHome" id="btnHome" onclick="window.location='index.php'" >回首頁</button>
             </div>
         </div>

@@ -1,21 +1,23 @@
 <?php
 require_once("connDB.php");
 session_start();
+//如果有會員登入就記住會員帳號，如果沒有登入就跳轉到登入頁
 if (isset($_SESSION["meaccount"])) {
   $meaccount = $_SESSION["meaccount"];
+  
 } else {
-  if (!isset($_SESSION["maccount"])) {
+  if (!isset($_SESSION["meaccount"])) {
     header("Location: login.php");
     exit();
   }
 }
+//如果按下商品選購按鈕，跳轉頁面到商品選購頁面
 if (isset($_GET["gopro"])) {
   header("Location: meproduct.php");
 }
-
+//如果按下刪除按鈕，那一項商品刪除
 if (isset($_GET["deletenew"])) {
   $deleten = $_GET["deletenew"];
-
   $sqldelete = "DELETE  FROM cart WHERE caid = '$deleten' ";
   mysqli_query($link, $sqldelete);
 }
@@ -23,18 +25,19 @@ if (isset($_GET["deletenew"])) {
 if (isset($_GET["caquantityadd"])) {
   $caquantityadd = $_GET["caquantityadd"];
   $caquantityt = $_GET['caquantityt'];
-
+  // 取得資料庫中購買量的欄位內容
   $sqladd = "SELECT caquantity from cart where caid = '$caquantityadd'";
   $result = mysqli_query($link, $sqladd);
   $row = mysqli_fetch_assoc($result);
   $i = implode(" ", $row);
+  // 取得資料庫中庫存量的欄位內容
   $sqlprq = "SELECT prquantity from cart where caid = '$caquantityadd'";
   $result1 = mysqli_query($link, $sqlprq);
   $row1 = mysqli_fetch_assoc($result1);
   $prquantity = implode(" ", $row1);
+  //如果購買量小於庫存量，購買量每按一次‘＋’按鈕購買量加一，並更新資料庫內容
   if ($i < $prquantity) {
     $i = $i + 1;
-
     $caquantityt = $_GET['caquantityt'];
     $caquantitya = "UPDATE `cart` SET `caquantity` = '$i' WHERE `caid` = '$caquantityadd' ";
     mysqli_query($link, $caquantitya);
@@ -44,12 +47,12 @@ if (isset($_GET["caquantityadd"])) {
 if (isset($_GET["caquantityr"])) {
   $caquantityr = $_GET["caquantityr"];
   $caquantityt = $_GET['caquantityt'];
-
+  // 取得資料庫中購買量的欄位內容
   $sqlr = "SELECT caquantity from cart where caid = '$caquantityr'";
   $result = mysqli_query($link, $sqlr);
   $row = mysqli_fetch_assoc($result);
   $i = implode(" ", $row);
-
+  //如果購買量大於零，購買量每按一次‘－’按鈕購買量減一，並更新資料庫內容
   if ($i > 0) {
     $i = $i - 1;
     $caquantityt = $_GET['caquantityt'];
@@ -60,13 +63,15 @@ if (isset($_GET["caquantityr"])) {
 //如果按下‘送出訂單’按鈕
 if (isset($_GET["cartok"])) {
   $meaccount = $_SESSION["meaccount"];
+  // 記下按下‘送出訂單’按鈕當下系統時間
   $ordate = date('Y-m-d h:i:s');
+  // 把購物車的資料加進訂單的表中
   $sqlorders = "INSERT INTO orders (meaccount,	caid,	prid,	prname,	prprice,	caquantity,	prdescript,	primg, ordate
   ) SELECT '$meaccount', caid,	prid,	prname,	prprice,	caquantity,	prdescript,	primg, '$ordate' FROM cart ";
   mysqli_query($link, $sqlorders);
+  // 並清空購物車的內容，同時跳轉到查看訂單的頁面
   $sqlclear = "TRUNCATE table cart";
   mysqli_query($link, $sqlclear);
-
   header("Location: orders.php");
 }
 ?>
@@ -94,7 +99,7 @@ if (isset($_GET["cartok"])) {
     }
   </style>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>Lag - Member Page</title>
+  <title>我的購物車</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 
 </head>
@@ -112,8 +117,6 @@ if (isset($_GET["cartok"])) {
     <div style="width:auto;height:600px;">
       <div style="width:auto;height:600px;text-align:center;margin:0 auto;">
         <?php
-        $link = @mysqli_connect("localhost", "root", "root", "shopping", 8889) or die(mysqli_connect_error());
-        $result = mysqli_query($link, "set names utf8");
         $meaccount = $_SESSION["meaccount"];
         $sqlcar = "SELECT * from cart";
         $result = mysqli_query($link, $sqlcar);
@@ -157,7 +160,6 @@ if (isset($_GET["cartok"])) {
                   <button type="submit" name="caquantityr" id="caquantityr" value="<?php echo $row['caid'] ?>">-</button>
                 </span>
               </td>
-
               <td>
                 <input type="text" name="catotal" style="background-color: transparent;" id="catotal" class="form-control" placeholder="0" value="<?php echo $total; ?>" onfocus="this.blur()" />
               </td>
@@ -176,10 +178,8 @@ if (isset($_GET["cartok"])) {
             </tr>
           <?php    }   ?>
         </table>
-        <!-- <div align="right"> -->
         <input type="text" name="alltotal" id="alltotal" class="form-control" style="background-color: transparent;" placeholder="合計" value="<?php error_reporting(E_ALL & ~E_NOTICE);echo "合計： " . $all ?>" onfocus="this.blur()" />
         <button type="submit" name="cartok" id="cartok" class="btn btn-success">送出訂單</button>
-        <!-- </div> -->
       </div>
     </div>
   </form>

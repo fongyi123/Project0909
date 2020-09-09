@@ -1,16 +1,22 @@
 <?php
 require_once("connDB.php");
-
 session_start();
+// 如果會員有登入，就記住會員帳號，要不然就記為遊客（Guest）
 if (isset($_SESSION["meaccount"])) {
   $meaccount = $_SESSION["meaccount"];
+  if (isset($_GET["cart"])) {
+    header("Location: cart.php");
+    exit();
+  }
 } else {
   $meaccount = "Guest";
 }
+// 如果按下登入按鈕，就跳轉到登入頁面
 if (isset($_GET["login"])) {
   header("Location: login.php");
   exit();
 }
+// 如果按下註冊按鈕，就跳轉到註冊頁面
 if (isset($_GET["signup"])) {
   header("Location: signup.php");
   exit();
@@ -19,16 +25,17 @@ if (isset($_GET["logout"])) {
   header("Location: login.php?logout=1");
   exit();
 }
-
+// 如果按下商品選購按鈕，就跳轉到商品選購頁面
 if (isset($_GET["meproduct"])) {
   header("Location: meproduct.php");
   exit();
 }
+// 如果按下購物車按鈕，就跳轉到購物車頁面
 if (isset($_GET["cart"])) {
   header("Location: cart.php");
   exit();
 }
-
+// 如果按下查看訂單按鈕，就跳轉到查看訂單頁面
 if (isset($_GET["orders"])) {
   header("Location: orders.php");
   exit();
@@ -45,7 +52,7 @@ if (isset($_GET["orders"])) {
     }
   </style>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>Lab - index</title>
+  <title>會員首頁</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 
 </head>

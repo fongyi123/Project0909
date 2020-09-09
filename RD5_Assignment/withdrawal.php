@@ -1,9 +1,11 @@
 <?php
 // require_once("connDB.php");
 session_start();
+//如果有會員登入就記住會員帳號，如果沒有登入就跳轉到登入頁
 if (isset($_SESSION["maccount"])) {
   $maccount = $_SESSION["maccount"];
   // echo $_SESSION["maccount"];
+  // 如果按下提款按鈕
   if (isset($_GET['withdrawal'])) {
     $dtrade = $_GET['moneyc'];
     $date = ('Y-m-d H:i:s');
@@ -15,6 +17,7 @@ if (isset($_SESSION["maccount"])) {
     $mbalance["mbalance"] = mysqli_fetch_assoc($result);
     $intmbalance = implode(",", $mbalance["mbalance"]);
     if (isset($_GET['moneyc'])) {
+      // 從資料庫取出餘額欄位的值減掉輸入提款的值，並更新資料庫的資料
       $intmbalance = $intmbalance - $dtrade;
       // var_dump($intmbalance);
       echo "<script>alert('$intmbalance'); </script>";
@@ -22,7 +25,6 @@ if (isset($_SESSION["maccount"])) {
       $result = mysqli_query($link, "set names utf8");
       $sqlsaving = "UPDATE member set mbalance = '$intmbalance' where maccount = '$maccount'";
       mysqli_query($link, $sqlsaving);
-
       $date = date('Y-m-d H:i:s');
       $maccount = $_SESSION["maccount"];
       $sqlinto = "INSERT INTO detail (daccount, dtranstype, dtrade, dtransdate) values('$maccount','withdrawal','$dtrade','$date')";
@@ -40,7 +42,7 @@ if (isset($_SESSION["maccount"])) {
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>Lag - Member Page</title>
+  <title>線上提款</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 </head>
 <body style="background:url('./img5/bank.jpg')round">

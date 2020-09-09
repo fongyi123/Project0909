@@ -2,6 +2,7 @@
 require_once("connDB.php");
 
 session_start();
+//如果有管理員登入就記住會員帳號，如果沒有登入就跳轉到登入頁
 if (isset($_SESSION["maaccount"])) {
   $maaccount = $_SESSION["maaccount"];
 } else {
@@ -42,7 +43,7 @@ if (isset($_SESSION["maaccount"])) {
     }
   </style>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>Lag - Member Page</title>
+  <title>訂單查詢</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 
 </head>
@@ -53,18 +54,15 @@ if (isset($_SESSION["maaccount"])) {
     <div align="center" bgcolor="#CCCCCC" style="background-color:SlateBlue;">
       <font color="#FFFFFF"><?= $maaccount . "   管理員訂單查詢"  ?></font>
     </div>
-    <div align="center" bgcolor="#CCCCCC"><a href="index2.php">回首頁</a></div>
+    <div align="center" bgcolor="#CCCCCC"><a href="index2.php">回首頁</a><a>/</a><a href="member.php">回會員管理</a></div>
     <div style="width:auto;height:600px;">
       <div style="width:auto;height:600px;text-align:center;margin:0 auto;">
         <label>
           <font color="#000000">訂單查詢結果 :
         </label>
         <?php
-        $link = @mysqli_connect("localhost", "root", "root", "shopping", 8889) or die(mysqli_connect_error());
-        $result = mysqli_query($link, "set names utf8");
+        // 比對會員帳號，顯示此會員的訂單明細
         $meaccount = $_SESSION["meaccount"];
-        // $sqlsecret = "SELECT * from orders Where meaccount ='$meaccount'";
-        // $result = mysqli_query($link, $sqlsecret);
         $id = $_GET["id"];
         $sqlo = "SELECT * FROM orders WHERE meaccount ='$id'";
         $result = mysqli_query($link, $sqlo); 

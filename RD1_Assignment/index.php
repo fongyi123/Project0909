@@ -1,29 +1,25 @@
 <?php
 require_once('connDB.php');
+// 如果按下查詢，記下縣市下拉式選單選到的值
 if (isset($_POST['btn'])) {
     $_SESSION["id"] = $_POST['city'];
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="jquery/jquery.mobile-1.4.5.min.css">
   <link rel="stylesheet" href="css/jquery.toast.css">
-  <title>Document</title>
+  <title>各縣市天氣查詢網站</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="js/app.js"></script>
-
   <script src="https://code.jquery.com/jquery-3.4.0.min.js" integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg=" crossorigin="anonymous"></script>
   <script>
     $(document).ready(function() {
       $("body").css("background-color", "lightblue")
-
-
     })
   </script>
   <style>
@@ -35,12 +31,10 @@ if (isset($_POST['btn'])) {
       color: rgb(0, 0, 0);
       text-align: center;
     }
-
     form {
       background-color: rgb(127, 224, 187);
       text-align: center;
     }
-
     select {
       width: 100%;
       padding: 16px 20px;
@@ -48,7 +42,6 @@ if (isset($_POST['btn'])) {
       border-radius: 4px;
       background-color: #f1f1f1;
     }
-
     button[type=submit] {
       width: 100%;
       background-color: #4CAF50;
@@ -59,28 +52,22 @@ if (isset($_POST['btn'])) {
       border-radius: 4px;
       cursor: pointer;
     }
-
     div {
       border-radius: 1px;
       padding: 2px;
     }
-
     div[class=card] {
       background-color: lightblue;
       margin-left: auto;
       margin-right: auto;
-
     }
-
     span.c {
       display: block;
       border: 1px solid blue;
     }
   </style>
 </head>
-
 <body style="background:url('./images/cloud.jpg')round">
-
   <h1>各縣市天氣查詢網站</h1>
   <form class="form-inline" method="POST" >
     <div class="form-group row">
@@ -112,8 +99,6 @@ if (isset($_POST['btn'])) {
         </select>
       </div>
     </div>
-
-
     <div class="form-group row">
       <label for="time" class="col-6 col-form-label">類型：
       </label>
@@ -135,49 +120,37 @@ if (isset($_POST['btn'])) {
     </div>
   </form >
   <div class="card" id="card">
-    
-    <!-- <div class="showData" id="id02" background-color=lightblue>
-      <button onclick="myFunction()">Try it</button>
-
-
-    </div> -->
     <div class="showData" id="id03" style="background:url('./images/cloud.jpg')round;">
     <div class="card1" id="id01">
-      <h2><?php echo $_POST["city"]?>特色圖</h2>
-      <img id=img01 src="./images/<?php echo $_POST["city"]?>.jpg" alt="<?php $_POST["city"]?>" width="20%" height="20%" style="display:block; margin:auto;">
+      <h2><?php // 錯誤訊息Notice: Undefined variable:關掉
+              error_reporting(E_ALL & ~E_NOTICE); echo $_POST["city"]?>特色圖</h2>
+      <img id=img01 src="./images/<?php // 錯誤訊息Notice: Undefined variable:關掉
+              error_reporting(E_ALL & ~E_NOTICE); echo $_POST["city"]?>.jpg" alt="請選擇縣市並查詢" width="20%" height="20%" style="display:block; margin:auto;">
     </div>
       <?php
+      // 如果按下查詢，記下時間類型下拉式選單選到的值
       if (isset($_POST['btn'])) {
         $_SESSION["id2"] = $_POST['time'];
+        // 如果時間類型下拉式選單選到的值等於"fweek"顯示一週天氣的資訊到首頁
         if($_SESSION["id2"]== "fweek"){
           require_once('week.php');
         }
+        // 如果時間類型下拉式選單選到的值等於"ftomorrow"顯示未來兩天天氣的資訊到首頁
         elseif($_SESSION["id2"]== "ftomorrow"){
           require_once('twodays.php');
         }
+        // 如果時間類型下拉式選單選到的值等於"current"顯示當前天氣的資訊到首頁
         elseif($_SESSION["id2"]== "current"){
           require_once('now.php');
         }  
         else{
+          // 剩下的顯示雨量的資訊到首頁
           require_once('rain.php');
         }
-        
       }
-      
-      
-      
-     
-      
       ?>
-
     </div>
-
-
   </div>
-  <!-- <script type='text/javascript'> 
-          var jsonData=JSON.parse('<?php echo $url; ?>'); //把抓到的資料給js的變數 
-          console.log(jsonData); //可以看到該變數有資料了 
-   </script>  -->
-</body>
 
+</body>
 </html>

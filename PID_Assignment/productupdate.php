@@ -1,6 +1,7 @@
 <?php
 require_once("connDB.php");
 session_start();
+// 如果管理員有登入，就記住會員帳號，要不然就記為遊客（Guest）
 if (isset($_SESSION["maaccount"])) {
   $meaccount = $_SESSION["maaccount"];
 } else {
@@ -10,9 +11,8 @@ if (isset($_SESSION["maaccount"])) {
   }
 }
 $maaccount = $_SESSION["maaccount"];
-
 $upd = $_GET["id"];
-
+// 如果按下編輯完成，將新輸入的商品資訊更新到資料庫
 if (isset($_GET["updatenewok"])) {
   $updatenewok = $_GET["updatenewok"];
   $prnamenewu = $_GET["prnamenewu"];
@@ -21,19 +21,15 @@ if (isset($_GET["updatenewok"])) {
   $prdescriptnewu = $_GET["prdescriptnewu"];
   $primgnewu = $_GET["primgnewu"];
   $sqlupdatenewok = "UPDATE `product` SET `prname` = '$prnamenewu',`prprice` = '$prpricenewu',`prquantity` = '$prquantitynewu',`prdescript` = '$prdescriptnewu',`primg` = '$primgnewu' WHERE `product`.`prid` = '$updatenewok' ";
-
   mysqli_query($link, $sqlupdatenewok);
   header("Location: product.php");
 }
-
 $sqlsecret = "SELECT * from product WHERE prid = '$upd'";
 $result = mysqli_query($link, $sqlsecret);
 $total_records = mysqli_num_rows($result);  // 取得記錄數
-
 ?>
 <!DOCTYPE html>
 <html>
-
 <head>
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <style>
@@ -57,14 +53,12 @@ $total_records = mysqli_num_rows($result);  // 取得記錄數
     }
   </style>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>Lag - Member Page</title>
+  <title>商品編輯</title>
   <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"> -->
   <script src="js/jquery.js"></script>
   <script src="js/bootstrap.min.js"></script>
   <script type="text/javascript" src="js/jquery.toast.js"></script>
-
 </head>
-
 <body style="background:url('./img/bookindex.jpg')round">
   <h1 align="center">線上購書商城</h1>
   <form id="form1" name="form1" border="0" align="center" cellpadding="5" cellspacing="0" bgcolor="#F2F2F2">
@@ -88,11 +82,9 @@ $total_records = mysqli_num_rows($result);  // 取得記錄數
         <td>商品描述</td>
         <td>商品圖片</td>
         <td>編輯功能</td>
-
       </tr>
       <?php
       while ($row = mysqli_fetch_assoc($result)) {
-
       ?>
         <tr>
           <td>
@@ -153,7 +145,6 @@ $total_records = mysqli_num_rows($result);  // 取得記錄數
         ?>
       <?php    }   ?>
     </table>
-
     </div>
     <div style=" background-color:SlateBlue;">
       <font color="#FFFFFF"><?= "Welcome! " . $maaccount ?></font>
@@ -162,5 +153,4 @@ $total_records = mysqli_num_rows($result);  // 取得記錄數
   <script>
   </script>
 </body>
-
 </html>

@@ -1,6 +1,7 @@
 <?php
 require_once("connDB.php");
 session_start();
+// 如果管理者有登入，就記住管理者帳號，要不然就跳轉到登入頁面
 if (isset($_SESSION["maaccount"])) {
   $meaccount = $_SESSION["maaccount"];
 } else {
@@ -9,22 +10,19 @@ if (isset($_SESSION["maaccount"])) {
     exit();
   }
 }
+// 如果按下上架商品按鈕，就把輸入的產品資訊加到資料庫
 if (isset($_GET["okButton"])) {
   $prnamenew = $_GET["prnamenew"];
   $prpricenew = $_GET["prpricenew"];
   $prquantitynew = $_GET["prquantitynew"];
   $prdescriptnew = $_GET["prdescriptnew"];
   $primgnew = $_GET["primgnew"];
-
   $sqlnew = "INSERT INTO product (prname, prprice, prquantity, prdescript, primg) values('$prnamenew','$prpricenew','$prquantitynew','$prdescriptnew','$primgnew')";
   mysqli_query($link, $sqlnew);
 }
-
-
-
+// 如果按下刪除按鈕，則刪除該項商品
 if (isset($_GET["deletenew"])) {
   $deleten = $_GET["deletenew"];
-
   $sqldelete = "DELETE  FROM product WHERE prid = '$deleten' ";
   mysqli_query($link, $sqldelete);
 }
@@ -38,29 +36,24 @@ if (isset($_GET["deletenew"])) {
     body {
       background-color: lightblue;
     }
-
     table {
       border-collapse: collapse;
       width: 100%;
     }
-
-    th,
-    td {
+    th,td {
       text-align: left;
       padding: 8px;
     }
-
     tr:nth-child(even) {
       background-color: #f2f2f2
     }
-
     th {
       background-color: #4CAF50;
       color: white;
     }
   </style>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>Lag - Member Page</title>
+  <title>商品管理</title>
   <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"> -->
   <script src="js/jquery.js"></script>
   <script src="js/bootstrap.min.js"></script>
@@ -80,18 +73,13 @@ if (isset($_GET["deletenew"])) {
       <font color="#000000">商品列表 :
     </label>
     <?php
-    $link = @mysqli_connect("localhost", "root", "root", "shopping", 8889) or die(mysqli_connect_error());
-    $result = mysqli_query($link, "set names utf8");
     $maaccount = $_SESSION["maaccount"];
     $sqlsecret = "SELECT * from product";
     $result = mysqli_query($link, $sqlsecret);
-
     $total_records = mysqli_num_rows($result);  // 取得記錄數
-
     echo ($total_records);
     ?>
     <input type="button" name="addnewpro" id="addnewpro" class="btn btn-success" value="上架商品" />
-
     <table border="1" id="latestNews" cellspacing=0 cellspadding=0>
       <tr>
         <td>商品編號</td>
@@ -101,11 +89,9 @@ if (isset($_GET["deletenew"])) {
         <td>商品描述</td>
         <td>商品圖片</td>
         <td>編輯功能</td>
-
       </tr>
       <?php
       while ($row = mysqli_fetch_assoc($result)) {
-
       ?>
         <tr>
           <td>
@@ -127,7 +113,7 @@ if (isset($_GET["deletenew"])) {
             <img id=<?php echo $row['primg']; ?> src="./img/<?php echo $row['primg']; ?>" width="10%" height="10%">
           </td>
           <td>
-            <button type="button" name="updatenew" id="updatenew" class="btn btn-info" onclick="window.location='productupdate.php?id=<?php echo $row['prid']?>'">編輯</button>
+            <button type="button" name="updatenew" id="updatenew" class="btn btn-info" onclick="window.location='productupdate.php?id=<?php echo $row['prid'] ?>'">編輯</button>
             <button type="submit" name="deletenew" id="deletenew" class="btn btn-danger" value="<?php echo $row['prid'] ?>">刪除</button>
             <?php
             ?>
@@ -135,12 +121,10 @@ if (isset($_GET["deletenew"])) {
         </tr>
       <?php    }   ?>
     </table>
-
     </div>
     <div style=" background-color:SlateBlue;">
       <font color="#FFFFFF"><?= "Welcome! " . $maaccount ?></font>
     </div>
-
     <!-- 對話盒 -->
     <div id="newsModal" class="modal fade" role="dialog">
       <div class="modal-dialog">
@@ -195,13 +179,12 @@ if (isset($_GET["deletenew"])) {
     <!-- /對話盒 -->
   </form>
   <script>
+    // 點擊上架商品跳出對話盒子輸入商品資訊
     $("#addnewpro").click(function() {
       $("#newsModal").modal({
         backdrop: "static"
       });
     })
-
   </script>
 </body>
-
 </html>

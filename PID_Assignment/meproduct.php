@@ -1,19 +1,22 @@
 <?php
 require_once("connDB.php");
 session_start();
+//如果有會員登入就記住會員帳號，如果沒有登入就跳轉到登入頁
 if (isset($_SESSION["meaccount"])) {
   $meaccount = $_SESSION["meaccount"];
 } else {
-  if (!isset($_SESSION["maccount"])) {
+  if (!isset($_SESSION["meaccount"])) {
     header("Location: login.php");
     exit();
   }
 }
+// 如果按下加入購物車的按鈕
 if (isset($_GET["gocart"])) {
   $gocart = $_GET["gocart"];
   $sqladdr1 = "SELECT * FROM cart WHERE prid = '$gocart'";
   $result1 = mysqli_query($link, $sqladdr1);
   $row1 = mysqli_fetch_assoc($result1);
+  //同一項商品的購買數量會相加，而不會在購物車出項同商品出現多欄的情況
   if ($row1["prid"] == $gocart) {
     $sqladdr = "SELECT caquantity FROM cart WHERE prid = '$gocart'";
     $result = mysqli_query($link, $sqladdr);
@@ -28,12 +31,14 @@ if (isset($_GET["gocart"])) {
     $result11 = mysqli_query($link, $sqlprq);
     $row11 = mysqli_fetch_assoc($result11);
     $prquantity = implode(" ", $row11);
+    //如果點擊同項商品加入購物車的次數小於庫存量的話，購物車中此項商品的購買數量增加，同時並跳出提示框顯示“已經加入購物車”
     if ($i < $prquantity) {
       $impcaq = $impcaq + 1;
       $sqlupaddr = "UPDATE cart set caquantity = '$impcaq' WHERE prid = '$gocart'";
       mysqli_query($link, $sqlupaddr);
     }
   } else {
+    //如果點擊加入購物車的那項商品還沒有在購物車中，就把此項商品加到購物車並跳轉到購物車的頁面
     $sqlgocart = "INSERT INTO cart (prid, prname, prprice, prquantity, prdescript, primg) SELECT prid, prname, prprice, prquantity, prdescript, primg FROM product WHERE prid = '$gocart'";
     mysqli_query($link, $sqlgocart);
     header("Location: cart.php"); 
@@ -52,7 +57,7 @@ if (isset($_GET["gocart"])) {
     }
   </style>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>Lag - Member Page</title>
+  <title>商品選購</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 
 </head>

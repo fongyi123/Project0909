@@ -1,50 +1,39 @@
 <?php
 session_start();
+// 如果會員有登入，記下該會員帳號，要不然就跳轉到登入頁面
 if (isset($_SESSION["maccount"])) {
   $maccount = $_SESSION["maccount"];
 } else {
   if (!isset($_SESSION["maccount"])) {
-
-
-
     header("Location: login.php");
     exit();
   }
 }
 ?>
-
-
 <!DOCTYPE html>
 <html>
-
 <head>
   <style>
-    
     table {
       border-collapse: collapse;
       width: 100%;
     }
-
     th,td {
       text-align: left;
       padding: 8px;
     }
-
     tr:nth-child(even) {
       background-color: #f2f2f2
     }
-
     th {
       background-color: #4CAF50;
       color: white;
     }
   </style>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>Lag - Member Page</title>
+  <title>明細查詢</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-
 </head>
-
 <body style="background:url('./img5/bank.jpg')round">
   <h1 align="center">線上網銀系統</h1>
   <form id="form1" name="form1" border="0" align="center" cellpadding="5" cellspacing="0" bgcolor="#F2F2F2">
@@ -64,9 +53,7 @@ if (isset($_SESSION["maccount"])) {
           $maccount = $_SESSION["maccount"];
           $sqlsecret = "SELECT * from detail";
           $result = mysqli_query($link, $sqlsecret);
-
           $total_records = mysqli_num_rows($result);  // 取得記錄數
-
           echo ($total_records);
           ?>
           <table border="1" cellspacing=0 cellspadding=0>
@@ -108,5 +95,4 @@ if (isset($_SESSION["maccount"])) {
       </div>
   </form>
 </body>
-
 </html>

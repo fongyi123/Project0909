@@ -2,6 +2,7 @@
 require_once("connDB.php");
 
 session_start();
+//如果有會員登入就記住會員帳號，如果沒有登入就跳轉到登入頁
 if (isset($_SESSION["meaccount"])) {
   $meaccount = $_SESSION["meaccount"];
 } else {
@@ -11,8 +12,7 @@ if (isset($_SESSION["meaccount"])) {
     exit();
   }
 }
-$link = @mysqli_connect("localhost", "root", "root", "shopping", 8889) or die(mysqli_connect_error());
-$result = mysqli_query($link, "set names utf8");
+// 比對已經記住的會員帳號，顯示此會員的訂單明細
 $meaccount = $_SESSION["meaccount"];
 $sqlsecret = "SELECT * from orders Where meaccount ='$meaccount'";
 $result = mysqli_query($link, $sqlsecret);
@@ -47,7 +47,7 @@ $result = mysqli_query($link, $sqlsecret);
     }
   </style>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>Lag - Member Page</title>
+  <title>訂單查詢</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 </head>
 

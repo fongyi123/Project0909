@@ -1,7 +1,7 @@
 <?php
 require_once("connDB.php");
-
 session_start();
+// 如果管理者有登入，就記住管理者帳號，要不然就跳轉到登入頁面
 if (isset($_SESSION["maaccount"])) {
   $maaccount = $_SESSION["maaccount"];
 } else {
@@ -10,19 +10,18 @@ if (isset($_SESSION["maaccount"])) {
     exit();
   }
 }
+// 如果按下禁用按鈕，就更新該會員的權限並更新資料庫
 if (isset($_GET["Disablex"])) {
   $Disablex = $_GET["Disablex"];
-
   $sqlDisablex = "UPDATE `member` SET `mestatus` = 'Disable' WHERE `member`.`meid` = '$Disablex'; ";
   mysqli_query($link, $sqlDisablex);
 }
+// 如果按下啟用按鈕，就更新該會員的權限並更新資料庫
 if (isset($_GET["normalo"])) {
   $normalo = $_GET["normalo"];
-
   $sqlnormalo = "UPDATE `member` SET `mestatus` = 'normal' WHERE `member`.`meid` = '$normalo'; ";
   mysqli_query($link, $sqlnormalo);
 }
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -48,7 +47,7 @@ if (isset($_GET["normalo"])) {
     }
   </style>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>Lag - Member Page</title>
+  <title>會員管理</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 </head>
 <body style="background:url('./img/bookindex.jpg')round">
@@ -64,8 +63,6 @@ if (isset($_GET["normalo"])) {
             <font color="#000000">會員列表 :
           </label>
           <?php
-          $link = @mysqli_connect("localhost", "root", "root", "shopping", 8889) or die(mysqli_connect_error());
-          $result = mysqli_query($link, "set names utf8");
           $maaccount = $_SESSION["maaccount"];
           $sqlsecret = "SELECT * from member";
           $result = mysqli_query($link, $sqlsecret);
@@ -120,6 +117,7 @@ if (isset($_GET["normalo"])) {
                 <td>
                 <button type="submit" name="Disablex" id="Disablex" class="btn btn-danger" value="<?php echo $row['meid'] ?>">禁用</button>
                 <button type="submit" name="normalo" id="normalo" class="btn btn-success" value="<?php echo $row['meid'] ?>">啟用</button>
+                <!-- 查詢該會員的訂單明細 -->
                 <button type="button" name="orders" class="btn btn-primary" onclick="window.location='orders2.php?id=<?php echo $row['meaccount']?>'">訂單查詢</button>
                 <?php
                  ?>

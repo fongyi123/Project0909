@@ -1,16 +1,18 @@
 <?php
 require_once("connDB.php");
-
 session_start();
+// 如果管理員有登入，就記住會員帳號，要不然就記為遊客（Guest）
 if (isset($_SESSION["maaccount"])) {
   $maaccount = $_SESSION["maaccount"];
 } else {
   $maaccount = "Guest";
 }
+// 如果按下登入按鈕，就跳轉到登入頁面
 if (isset($_GET["login2"])) {
   header("Location: login2.php");
   exit();
 }
+// 如果按下註冊按鈕，就跳轉到註冊頁面
 if (isset($_GET["signup2"])) {
   header("Location: signup2.php");
   exit();
@@ -19,24 +21,24 @@ if (isset($_GET["logout"])) {
   header("Location: login2.php?logout=1");
   exit();
 }
-
+// 如果按下商品管理按鈕，就跳轉到商品管理頁面
 if (isset($_GET["product"])) {
   header("Location: product.php");
   exit();
 }
+// 如果按下會員管理按鈕，就跳轉到會員管理頁面
 if (isset($_GET["member"])) {
   header("Location: member.php");
   exit();
 }
+// 如果按下前往會員端按鈕，就跳轉到會員端首頁頁面
 if (isset($_GET["gomember"])) {
   header("Location: index.php");
   exit();
 }
 ?>
-
 <!DOCTYPE html>
 <html>
-
 <head>
   <style>
     body {
@@ -44,14 +46,12 @@ if (isset($_GET["gomember"])) {
     }
   </style>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>Lab - index</title>
+  <title>管理者首頁</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 </head>
-
 <body style="background:url('./img/bookindex.jpg')round">
   <h1 align="center">線上購書商城</h1>
   <form width="100%" height="200" border="0" align="center" cellpadding="5" cellspacing="0" bgcolor="#F2F2F2">
-
     <div align="center" bgcolor="#CCCCCC" style="background-color:SlateBlue;">
       <font color="#FFFFFF">管理員系統 - 首頁</font>
     </div>
@@ -77,5 +77,4 @@ if (isset($_GET["gomember"])) {
     </div>
   </form>
 </body>
-
 </html>
